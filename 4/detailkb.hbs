@@ -15,8 +15,20 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 </head>
+
 <body>
-<div class="container my-5">
+    <Nav style="background-color: gray; height: 80px; height: max-content;">
+        <div class="d-flex justify-content-center pt-2">
+            <h3>Detail Kabupaten</h3>
+        </div>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link mx-5" aria-current="page" href="/4">Home</a>
+            </li>
+        </ul>
+    </Nav>
+
+    <div class="container my-5">
         <div class="blog-detail row ">
             <div class="blog-detail-container col-md-10">
                 <h1 class="display-4 fw-bold">{{this.Nama}}</h1>
@@ -30,7 +42,7 @@
                 <a href="/updatekb/{{this.id}}"><button class="btn btn-secondary mx-2">Edit Kabupaten</button></a>
                 <form method="post" action="/deletekb/{{this.id}}">
                     <button class="btn btn-dark">Delete</button>
-               </form>
+                </form>
             </div>
             <div>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -39,4 +51,5 @@
             </div>
         </div>
 </body>
+
 </html>
