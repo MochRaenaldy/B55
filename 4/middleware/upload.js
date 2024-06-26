@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
     // Math.round(Math.random * 1E9) mengatur untuk memberi angka random
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
     // const fileExtension = path.extname(file.originalname)
-    cb(null, file.fieldname + "-" + uniqueSuffix )
+    cb(null, file.fieldname + "-" + uniqueSuffix  )
   },
 });
 

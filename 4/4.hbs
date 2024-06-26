@@ -24,61 +24,72 @@
         <div class="d-flex justify-content-center pt-2">
             <h3>Provinsi dan Kabupaten</h3>
         </div>
-        <div class="d-flex justify-content-end">
-            <a href="/addpr" class="btn-outline-dark mx-2">Add Provinsi</a>
-            <a href="/addkb" class="btn-outline-light mx-2">Add kabupaten</a>
+        <div class="d-flex justify-content-start ">
+             <a class="nav-link mx-5 btn btn-outline-success" aria-current="page" href="/4">Home</a>
         </div>
-        <select name="select" id="select" onchange="onChangeFile()">
+        <div class="d-flex justify-content-end">
+            <a href="/addpr" class="btn btn-outline-dark mx-2">Add Provinsi</a>
+            <a href="/addkb" class="btn btn-outline-light mx-2">Add kabupaten</a>
+        </div>
+        <select name="select" id="select" >
+             <option value="all">Select</option>
             <option value="provinsi">Provinsi</option>
             <option value="kabupaten">Kabupaten</option>
         </select>
     </Nav>
 
+
     <h3 class="d-flex justify-content-center my-3">List Provinsi</h3>
     <div class="d-flex flex-wrap" style="width: 100%;">
-    {{#each dataprov}}
+    {{#each data}}
+    {{#if this.provinsi_id}}
     <div class="container" style="width: 300px;">
     <div class="card mb-4 my-4">
         <div class="px-3 shadow-sm " style="height:max-content;">
-            <img src="./uploads/{{this.photo}}" alt="photo prov" class="object-fit-cover mt-3" width="100%" height="200px">
+            <img src="./uploads/{{this.provinsi_photo}}" alt="photo prov" class="object-fit-cover mt-3" width="100%" height="200px">
             <p class="card-text text-center font-weight-bold mt-3">{{this.nama}}</p>
-            <p class="card-text text-center ">{{this.diresmikan}}</p>
+            <p class="card-text text-center ">{{this.provinsi_resmi}}</p>
             <div class="d-flex justify-content-center">
-            <a href="/detailpr/{{this.id}}"><button class="btn btn-secondary mx-2 my-2">Detail</button></a>
+            <a href="/detailpr/{{this.provinsi_id}}"><button class="btn btn-secondary mx-2 my-2">Detail</button></a>
             </div>
         </div>
     </div>
     </div>
-    {{/each}}
+    {{/if}}
+     {{/each}}
     </div>
 
      <h3 class="d-flex justify-content-center my-3">List Kabupaten</h3>
      <div class="d-flex flex-wrap" style="width: 100%;">
-    {{#each datakab}}
+     {{#each data}}
+     {{#if this.kabupaten_id}}
     <div class="container" style="width: 300px;">
     <div class="card mb-4 my-4">
         <div class="px-3 shadow-sm " style="height:max-content;">
-            <img src="./uploads/{{this.photo}}" alt="photo prov" class="object-fit-cover mt-3" width="100%" height="200px">
+            <img src="./uploads/{{this.kabupaten_photo}}" alt="photo prov" class="object-fit-cover mt-3" width="100%" height="200px">
             <p class="card-text text-center font-weight-bold mt-3">{{this.Nama}}</p>
-            <p class="card-text text-center ">{{this.diresmikan}}</p>
+            <p class="card-text text-center ">{{this.kabupaten_resmi}}</p>
             <div class="d-flex justify-content-center">
-            <a href="/detailkb/{{this.id}}"><button class="btn btn-secondary mx-2 my-2">Detail</button></a>
+            <a href="/detailkb/{{this.kabupaten_id}}"><button class="btn btn-secondary mx-2 my-2">Detail</button></a>
             </div>
         </div>
     </div>
     </div>
-    {{/each}}
+     {{/if}}
+     {{/each}}
     </div>
 
 
 </body>
-<script>
-
-    let val = "provinsi"
-    function onChangeFile() {
-        let valSelect = document.getElementById("select");
-        val = valSelect.value ? valSelect.value : "provinsi"
-    }
-</script>
+    <script>
+        document.getElementById('select').addEventListener('change', function() {
+            const selectedValue = this.value;
+            let url = '/4';
+            if (selectedValue) {
+                url += `?filter=${selectedValue}`;
+            }
+            window.location.href = url;
+        });
+    </script> 
 
 </html>

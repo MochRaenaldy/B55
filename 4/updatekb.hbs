@@ -22,9 +22,9 @@
         <div class="d-flex justify-content-center pt-2">
             <h3>Update Kabupaten</h3>
         </div>
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="nav mb-2 mb-lg-0">
             <li class="nav-item">
-                <a class="nav-link mx-5" aria-current="page" href="/4">Home</a>
+                <a class="nav-link mx-5 btn btn-outline-success" aria-current="page" href="/4">Home</a>
             </li>
         </ul>
     </Nav>
@@ -34,18 +34,26 @@
             <h2 class="my-3 d-flex justify-content-center">Edit Data Kabupaten</h2>
         </div>
         <form method="post" action="/updatekb" enctype="multipart/form-data" class="form">
-            <input type="hidden" name="id" value="{{this.id}}" />
+            <input type="hidden" name="id" value="{{this.data.id}}" />
             <div class="form-group mb-3">
                 <label for="input name">Nama Kabupaten</label>
-                <input type="text" class="form-control" id="kabupaten" name="Nama" value="{{this.Nama}}" />
+                <input type="text" class="form-control" id="kabupaten" name="Nama" value="{{this.data.Nama}}" />
             </div>
             <div class="form-group mb-3">
                 <label for="date">Tanggal Diresmikannya</label>
-                <input type="date" name="diresmikan" class="date-input" id="diresmikan" value="{{this.diresmikan}}" />
+                <input type="date" name="diresmikan" class="date-input" id="diresmikan" value="{{this.data.diresmikan}}" />
+            </div>
+            <div class="form-group">
+                <label for="provinsi_id">Provinsi</label>
+                <select class="form-select" name="Provinsi_id" required>
+                    {{#each prov}}
+                    <option value="{{this.id}}">{{this.nama}}</option>
+                    {{/each}}
+                </select>
             </div>
             <label for="image">Preview Image</label><br />
             <div id="preview-img">
-                <img src="/assets/img-not-found.jpg" style="width: 100px;" /><br />
+                <img src="/assets/{{this.data.photo}}" style="width: 100px;" /><br />
             </div>
             <label for="formFile" class="form-label">Upload photo</label>
             <input class="form-control" name="photo" type="file" id="photo" onchange="onChangeFile()" />

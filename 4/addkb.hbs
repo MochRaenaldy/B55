@@ -23,9 +23,9 @@
         <div class="d-flex justify-content-center pt-2">
             <h3>Tambah Kabupaten</h3>
         </div>
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="nav mb-2 mb-lg-0">
             <li class="nav-item">
-                <a class="nav-link mx-5" aria-current="page" href="/4">Home</a>
+                <a class="nav-link mx-5 btn btn-outline-success" aria-current="page" href="/4">Home</a>
             </li>
         </ul>
     </Nav>
@@ -39,17 +39,27 @@
                 <label for="input name">Nama Kabupaten</label>
                 <input type="text" class="form-control" id="kabupaten" name="Nama" />
             </div>
+
             <div class="form-group mb-3">
                 <label for="date">Tanggal Diresmikannya</label>
                 <input type="date" name="diresmikan" class="date-input" id="diresmikan" />
             </div>
+
+            <div class="form-group">
+                <label for="provinsi_id">Provinsi</label>
+                    <select class="form-select" name="Provinsi_id" required>
+                    {{#each prov}}
+                        <option value="{{this.id}}">{{this.nama}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
             <label for="image">Preview Image</label><br />
             <div id="preview-img">
                 <img src="assests/images/img-not-found.jpg" style="width: 100px;" /><br />
             </div>
             <label for="formFile" class="form-label">Upload photo</label>
             <input class="form-control" name="photo" type="file" id="photo" onchange="onChangeFile()" />
-
             <div class="d-flex justify-content-end mt-4">
                 <button class="text-white bg-dark rounded-2">Submit</button>
             </div>

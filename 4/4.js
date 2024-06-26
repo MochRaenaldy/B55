@@ -34,25 +34,67 @@ app.post("/deletekb/:id", deletekb);
 
 async function home (req, res){
   console.log(req.body, "body")
-    const query =`SELECT * FROM provinsi_tbs`
-    const obj = await sequelize.query(query,{type :QueryTypes.SELECT})
-    const query2 =`SELECT * FROM kabupaten_tbs`
-    const obj2 = await sequelize.query(query2,{type :QueryTypes.SELECT})
+  const { filter } = req.query;
+
+  let query = `
+      SELECT
+          provinsi_tbs.id AS provinsi_id,
+          provinsi_tbs.nama,
+          provinsi_tbs.diresmikan AS provinsi_resmi ,
+          provinsi_tbs.photo AS provinsi_photo ,
+          provinsi_tbs.pulau ,
+          kabupaten_tbs.id AS kabupaten_id,
+          kabupaten_tbs."Nama" ,
+          kabupaten_tbs."Provinsi_id" ,
+          kabupaten_tbs.diresmikan AS kabupaten_resmi,
+          kabupaten_tbs.photo AS kabupaten_photo
+      FROM
+          provinsi_tbs
+      LEFT JOIN
+          kabupaten_tbs ON kabupaten_tbs."Provinsi_id" = provinsi_tbs.id
+  `;
+
+  if (filter === 'provinsi') {
+     query =` SELECT
+                provinsi_tbs.id AS provinsi_id,
+                provinsi_tbs.nama,
+                provinsi_tbs.diresmikan AS provinsi_resmi,
+                provinsi_tbs.photo AS provinsi_photo ,
+                provinsi_tbs.pulau
+            FROM
+                provinsi_tbs`;
     
-    res.render("4", {dataprov : obj ,datakab : obj2});
+    } else if (filter === 'kabupaten') {
+     query =`SELECT
+                kabupaten_tbs.id AS kabupaten_id,
+                kabupaten_tbs."Nama",
+                kabupaten_tbs."Provinsi_id",
+                kabupaten_tbs.diresmikan AS kabupaten_resmi,
+                kabupaten_tbs.photo AS kabupaten_photo
+                
+            FROM
+                kabupaten_tbs`;
+    }
+
+    const obj = await sequelize.query(query,{type :QueryTypes.SELECT})
+  
+    res.render("4", {data : obj});
 }
 
 function viewaddpr(req,res) {
     res.render ("addpr")
 }
 
-function viewaddkb(req,res) {
-    res.render ("addkb")
+async function viewaddkb(req,res) {
+  const query = `SELECT id, nama FROM "provinsi_tbs"`;
+    const prov = await sequelize.query(query, { type: QueryTypes.SELECT });
+
+    res.render ("addkb", {prov})
 }
 
 async function addProvinsi(req,res) {
-    const {provinsiName,diresmikan,pulau} = req.body
-    const photo = req.file.filename
+    let {provinsiName,diresmikan,pulau} = req.body
+    let photo = req.file.filename
 
     let query = `INSERT INTO provinsi_tbs(nama,diresmikan,photo,pulau)
     VALUES ('${provinsiName}','${diresmikan}','${photo}','${pulau}')`;
@@ -63,11 +105,11 @@ async function addProvinsi(req,res) {
 }
 
 async function addkb(req,res) {
-    const {Nama,diresmikan} = req.body
-    const photo = req.file.filename
+    let {Nama,diresmikan,Provinsi_id} = req.body
+    let photo = req.file.filename
 
-    let query = `INSERT INTO kabupaten_tbs("Nama",diresmikan,photo)
-    VALUES ('${Nama}','${diresmikan}','${photo}')`;
+    let query = `INSERT INTO kabupaten_tbs("Nama","Provinsi_id",diresmikan,photo)
+    VALUES ('${Nama}','${Provinsi_id}','${diresmikan}','${photo}')`;
 
     await sequelize.query(query,{type : QueryTypes.INSERT})
     res.redirect("4")
@@ -87,7 +129,17 @@ async function detailkb(req, res) {
   
     const { id } = req.params;
   
-    const query =`SELECT * FROM kabupaten_tbs WHERE id=${id}`
+    const query =`SELECT
+                kabupaten_tbs.id,
+                kabupaten_tbs."Nama",
+                kabupaten_tbs."Provinsi_id",
+                kabupaten_tbs.diresmikan,
+                kabupaten_tbs.photo,
+                provinsi_tbs.nama
+            FROM
+                kabupaten_tbs
+            LEFT JOIN
+                provinsi_tbs ON kabupaten_tbs."Provinsi_id" = provinsi_tbs.id WHERE kabupaten_tbs.id =${id}`;
     const obj = await sequelize.query(query,{type: QueryTypes.SELECT})
   
     res.render("detailkb", obj[0]);
@@ -96,7 +148,14 @@ async function detailkb(req, res) {
   async function updateviewpr(req, res) {
     const { id } = req.params;
   
-    const query =`SELECT * FROM provinsi_tbs WHERE id=${id}`
+    const query =` SELECT
+                provinsi_tbs.id,
+                provinsi_tbs.nama,
+                provinsi_tbs.diresmikan,
+                provinsi_tbs.photo,
+                provinsi_tbs.pulau
+            FROM
+                provinsi_tbs WHERE id=${id}`;
     const obj = await sequelize.query(query,{type: QueryTypes.SELECT})
   
     res.render("updatepr", obj[0]);
@@ -104,11 +163,12 @@ async function detailkb(req, res) {
 
 async function updateviewkb(req, res) {
     const { id } = req.params;
-  
     const query =`SELECT * FROM kabupaten_tbs WHERE id=${id}`
     const obj = await sequelize.query(query,{type: QueryTypes.SELECT})
+    const query2 = `SELECT id, nama FROM "provinsi_tbs"`;
+    const prov = await sequelize.query(query2, { type: QueryTypes.SELECT });
   
-    res.render("updatekb", obj[0]);
+    res.render("updatekb", {data : obj[0], prov: prov});
   }
 
 async function updatepr(req,res){
@@ -122,11 +182,11 @@ async function updatepr(req,res){
   }
 
 async function updatekb(req,res){
-    const {Nama,diresmikan,id} = req.body
+    const {Nama,Provinsi_id,diresmikan,id} = req.body
     const photo = req.file.filename
     
     const query = `UPDATE kabupaten_tbs
-	  SET  "Nama"='${Nama}', diresmikan='${diresmikan}', photo='${photo}' WHERE id='${id}'`;
+	  SET  "Nama"='${Nama}',"Provinsi_id"='${Provinsi_id}',diresmikan='${diresmikan}', photo='${photo}' WHERE kabupaten_tbs.id='${id}'`;
     await sequelize.query(query, { type: QueryTypes.UPDATE });
 
     res.redirect("/4");
