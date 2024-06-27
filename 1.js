@@ -28,8 +28,10 @@ if (barang_beli === "A" ) {
     console.log("Harga Barang yg anda beli: ", harga_b)
     console.log("Total harga barang yang anda beli :", total_harga)
     if (jumlah_barang > 7){
-        console.log("Diskon :", disc_b)
-        console.log("jumlah yang harus dibayar :", total_harga*disc_b)
+        const total_bayar = total_harga * disc_b
+        const total_semua = total_harga - total_bayar
+        console.log("Diskon :", total_bayar)
+        console.log("jumlah yang harus dibayar :", total_semua)
     }else {
     console.log("Jumlah yang harus dibayar:", total_harga)
     }
