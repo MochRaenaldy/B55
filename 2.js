@@ -4,11 +4,11 @@ function buble(arr) {
 
         for (var b = 0; b < (arr.length - a - 1); b++) {
 
-            if (arr[b] < arr[b + 1]) {
+            if (arr[b] > arr[b + 1]) {
 
-                var temp = arr[b]
+                var c = arr[b]
                 arr[b] = arr[b + 1]
-                arr[b + 1] = temp
+                arr[b + 1] = c
             }
         }
     }
