@@ -1,11 +1,20 @@
 function kotak(panjang) {
-    let hasil = '';
-    for (let i = 0; i < panjang; i++) {
-        for (let j = 0; j < panjang; j++) {
-            hasil += '* ';
-        }
-        hasil += '\n';
+    if (panjang % 2 === 0) {
+        console.log("Parameter harus ganjil");
+        return;
     }
-    return hasil;
+    for (let i = 0; i < panjang; i++) {
+    let hasil = '';
+        for (let j = 0; j < panjang; j++) {
+            if (i === j || i + j === panjang - 1 || j === Math.floor(panjang / 2)) {
+            hasil += '*\t';
+        } else {
+            hasil += '#\t';
+        }
+    }
+    console.log(hasil);
 }
-console.log(kotak(7));
+}
+(kotak(5));
+console.log('');
+(kotak(7));
