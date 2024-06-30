@@ -1,8 +1,5 @@
 function kotak(panjang) {
-    if (panjang % 2 === 0) {
-        console.log("Parameter harus ganjil");
-        return;
-    }
+
     for (let i = 0; i < panjang; i++) {
     let hasil = '';
         for (let j = 0; j < panjang; j++) {
@@ -13,7 +10,7 @@ function kotak(panjang) {
         }
     }
     console.log(hasil);
-}
+    }
 }
 (kotak(5));
 console.log('');
